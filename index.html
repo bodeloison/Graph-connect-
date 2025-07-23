@@ -2,58 +2,58 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <title>Graphique ARENH - papernest</title>
+    <title>Graphique ARENH – papernest</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
       body {
         margin: 0;
         font-family: 'Segoe UI', sans-serif;
-        background: linear-gradient(135deg, #fdfbff, #f4f8ff);
-        color: #1c1c1c;
-        padding: 40px 20px;
+        background: #f8f9ff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
       }
 
       .container {
-        max-width: 900px;
-        margin: auto;
+        max-width: 800px;
+        width: 100%;
         background: white;
         border-radius: 24px;
-        box-shadow: 0 12px 32px rgba(90, 82, 255, 0.15);
-        padding: 40px 30px;
-        transition: all 0.3s ease;
+        box-shadow: 0 10px 40px rgba(90, 82, 255, 0.1);
+        padding: 32px 24px;
+        transition: all 0.3s ease-in-out;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 0.6s ease-out forwards;
       }
 
-      .container:hover {
-        transform: scale(1.01);
-        box-shadow: 0 16px 40px rgba(90, 82, 255, 0.25);
+      @keyframes fadeInUp {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
 
       h1 {
         text-align: center;
-        font-size: 28px;
+        font-size: 26px;
         color: #5a52ff;
-        margin-bottom: 30px;
+        margin-bottom: 24px;
       }
 
       canvas {
         width: 100% !important;
         height: auto !important;
       }
-
-      .legend {
-        text-align: center;
-        font-size: 14px;
-        color: #666;
-        margin-top: 16px;
-      }
     </style>
   </head>
   <body>
     <div class="container">
-      <h1>📈 Évolution des valeurs ARENH</h1>
+      <h1>📊 Évolution des valeurs ARENH</h1>
       <canvas id="myChart"></canvas>
-      <div class="legend">Comparaison entre wARENH (#5a52ff) et woARENH (#0fc4b2)</div>
     </div>
 
     <script>
@@ -86,17 +86,19 @@
                 label: "wARENH",
                 data: wARENH,
                 borderColor: "#5a52ff",
-                backgroundColor: "rgba(90, 82, 255, 0.2)",
-                tension: 0.4,
-                fill: true
+                backgroundColor: "rgba(90, 82, 255, 0.08)",
+                tension: 0.3,
+                fill: true,
+                pointRadius: 2
               },
               {
                 label: "woARENH",
                 data: woARENH,
                 borderColor: "#0fc4b2",
-                backgroundColor: "rgba(15, 196, 178, 0.2)",
-                tension: 0.4,
-                fill: true
+                backgroundColor: "rgba(15, 196, 178, 0.08)",
+                tension: 0.3,
+                fill: true,
+                pointRadius: 2
               }
             ]
           },
@@ -114,7 +116,7 @@
               y: {
                 beginAtZero: false,
                 ticks: {
-                  callback: function(value) {
+                  callback: function (value) {
                     return value + " €";
                   }
                 }
@@ -128,3 +130,4 @@
     </script>
   </body>
 </html>
+
