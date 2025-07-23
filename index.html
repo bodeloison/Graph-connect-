@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Graphique ARENH rapide</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      body {
+        font-family: 'Segoe UI', sans-serif;
+        background-color: #ffffff;
+        padding: 20px;
+      }
+      .chart-container {
+        max-width: 900px;
+        margin: auto;
+        padding: 20px;
+        background: #f9f9ff;
+        border-radius: 20px;
+        box-shadow: 0 6px 24px rgba(90, 82, 255, 0.12);
+      }
+      h2 {
+        text-align: center;
+        color: #5a52ff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="chart-container">
+      <h2>📊 Évolution wARENH vs woARENH</h2>
+      <canvas id="myChart"></canvas>
+    </div>
+
+    <script>
+      const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQx6EhytRbWApgeu6Xzrx9rB-ljbk5rmDNb1zTpNA04gPbw5_1J5nsU4iLDymQ0ymGWgc4iPELmseN4/pub?gid=1717395148&single=true&output=csv";
+
+      fetch(csvUrl)
+        .then(response => response.text())
+        .then(csvText => {
+          const rows = csvText.trim().split("\n").slice(1);
+          const labels = [];
+          const wARENH = [];
+          const woARENH = [];
+
+          rows.forEach(row => {
+            const [date, val1, val2] = row.split(",");
+            labels.push(date);
+            wARENH.push(parseFloat(val1));
+            woARENH.push(parseFloat(val2));
+          });
+
+          const ctx = document.getElementById("myChart").getContext("2d");
+          new Chart(ctx, {
+            type: "line",
+            data: {
+              labels: labels,
+              datasets: [
+                {
+                  label: "wARENH",
+                  data: wARENH,
+                  borderColor: "#5a52ff",
+                  backgroundColor: "rgba(90,82,255,0.1)",
+                  fill: true
+                },
+                {
+                  label: "woARENH",
+                  data: woARENH,
+                  borderColor: "#0fc4b2",
+                  backgroundColor: "rgba(15,196,178,0.1)",
+                  fill: true
+                }
+              ]
+            },
+            options: {
+              responsive: true,
+              plugins: {
+                legend: {
+                  position: "bottom"
+                }
+              }
+            }
+          });
+        });
+    </script>
+  </body>
+</html>
