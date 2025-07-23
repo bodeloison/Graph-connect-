@@ -6,42 +6,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-      body {
+      html, body {
         margin: 0;
+        padding: 0;
         font-family: 'Segoe UI', sans-serif;
-        background: #ffffff;
+        background-color: #ffffff;
         display: flex;
         justify-content: center;
         align-items: center;
         min-height: 100vh;
-        padding: 20px;
       }
 
       .container {
         max-width: 800px;
         width: 100%;
         background: white;
-        border-radius: 24px;
-        box-shadow: 0 10px 40px rgba(90, 82, 255, 0.1);
-        padding: 32px 24px;
+        border-radius: 20px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.05);
+        padding: 24px 16px;
         transition: all 0.3s ease-in-out;
-        opacity: 0;
-        transform: translateY(20px);
-        animation: fadeInUp 0.6s ease-out forwards;
+        animation: fadeIn 0.3s ease-out;
       }
 
-      @keyframes fadeInUp {
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
       }
 
       h1 {
         text-align: center;
-        font-size: 26px;
+        font-size: 24px;
         color: #5a52ff;
-        margin-bottom: 24px;
+        margin-bottom: 20px;
       }
 
       canvas {
@@ -53,14 +49,14 @@
   <body>
     <div class="container">
       <h1>📊 Évolution des valeurs ARENH</h1>
-      <canvas id="myChart"></canvas>
+      <canvas id="myChart" aria-label="Graphique des données ARENH" role="img"></canvas>
     </div>
 
     <script>
-      const csvUrl =
-        "https://docs.google.com/spreadsheets/d/e/2PACX-1vQx6EhytRbWApgeu6Xzrx9rB-ljbk5rmDNb1zTpNA04gPbw5_1J5nsU4iLDymQ0ymGWgc4iPELmseN4/pub?gid=1717395148&single=true&output=csv";
+      (async () => {
+        const csvUrl =
+          "https://docs.google.com/spreadsheets/d/e/2PACX-1vQx6EhytRbWApgeu6Xzrx9rB-ljbk5rmDNb1zTpNA04gPbw5_1J5nsU4iLDymQ0ymGWgc4iPELmseN4/pub?gid=1717395148&single=true&output=csv";
 
-      async function fetchCSV() {
         const response = await fetch(csvUrl);
         const text = await response.text();
         const rows = text.trim().split("\n").slice(1);
@@ -72,33 +68,32 @@
         for (let row of rows) {
           const [date, val1, val2] = row.split(",");
           labels.push(date);
-          wARENH.push(parseFloat(val1));
-          woARENH.push(parseFloat(val2));
+          wARENH.push(+val1);
+          woARENH.push(+val2);
         }
 
-        const ctx = document.getElementById("myChart").getContext("2d");
-        new Chart(ctx, {
+        new Chart(document.getElementById("myChart"), {
           type: "line",
           data: {
-            labels: labels,
+            labels,
             datasets: [
               {
                 label: "wARENH",
                 data: wARENH,
                 borderColor: "#5a52ff",
                 backgroundColor: "rgba(90, 82, 255, 0.08)",
-                tension: 0.3,
                 fill: true,
-                pointRadius: 2
+                pointRadius: 2,
+                tension: 0.3
               },
               {
                 label: "woARENH",
                 data: woARENH,
                 borderColor: "#0fc4b2",
                 backgroundColor: "rgba(15, 196, 178, 0.08)",
-                tension: 0.3,
                 fill: true,
-                pointRadius: 2
+                pointRadius: 2,
+                tension: 0.3
               }
             ]
           },
@@ -116,17 +111,13 @@
               y: {
                 beginAtZero: false,
                 ticks: {
-                  callback: function (value) {
-                    return value + " €";
-                  }
+                  callback: value => value + " €"
                 }
               }
             }
           }
         });
-      }
-
-      fetchCSV();
+      })();
     </script>
   </body>
 </html>
